@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moda & Estilo - Bem-vindo</title>
+    <style>
+        :root {
+            --azul-bebe: #E0F2FE;
+            --azul-claro-hover: #BAE6FD;
+            --azul-escuro: #0369A1;
+            --fundo: #F8FAFC;
+            --texto: #334155;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--fundo);
+            color: var(--texto);
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .portal-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #E2E8F0;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+        h1 {
+            color: var(--azul-escuro);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        p {
+            color: #64748B;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .botoes-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn-portal {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: block;
+        }
+        .btn-cliente {
+            background-color: var(--azul-escuro);
+            color: white;
+        }
+        .btn-cliente:hover {
+            background-color: #025a8b;
+        }
+        .btn-adm {
+            background-color: var(--azul-bebe);
+            color: var(--azul-escuro);
+            border: 1px solid var(--azul-claro-hover);
+        }
+        .btn-adm:hover {
+            background-color: var(--azul-claro-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <h1>🩵 Moda & Estilo</h1>
+        <p>Seja bem-vindo! Como deseja acessar o sistema?</p>
+        
+        <div class="botoes-grupo">
+            <a href="/loja" class="btn-portal btn-cliente">🛍️ Entrar como Cliente</a>
+            <a href="/login" class="btn-portal btn-adm">⚙️ Painel do Administrador</a>
+        </div>
+    </div>
+</body>
+</html>
