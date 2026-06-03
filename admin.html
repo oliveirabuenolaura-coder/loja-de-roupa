@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Estoque</title>
+    <style>
+        :root { --azul-bebe: #E0F2FE; --azul-claro-hover: #BAE6FD; --azul-escuro: #0369A1; --fundo: #F8FAFC; --texto: #334155; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--fundo); color: var(--texto); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        header { background-color: var(--azul-escuro); padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: white; }
+        header h1 { margin: 0; font-size: 24px; }
+        .btn-sair { background: #EF4444; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .conteudo { display: grid; grid-template-columns: 1fr 2.5fr; gap: 25px; margin-bottom: 30px; }
+        @media (max-width: 900px) { .conteudo { grid-template-columns: 1fr; } }
+        .card { background: white; padding: 25px; border-radius: 16px; border: 1px solid #E2E8F0; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .card h2 { margin-top: 0; color: var(--azul-escuro); font-size: 18px; border-bottom: 3px solid var(--azul-bebe); padding-bottom: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; }
+        input { width: 100%; padding: 11px; border: 1px solid #CBD5E1; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        button { background-color: var(--azul-bebe); color: var(--azul-escuro); border: 1px solid var(--azul-claro-hover); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 14px; }
+        button:hover { background-color: var(--azul-claro-hover); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #E2E8F0; vertical-align: middle; }
+        th { background-color: var(--azul-bebe); color: var(--azul-escuro); font-weight: 600; }
+        .img-tabela { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #E2E8F0; background: #F1F5F9; }
+        .btn-excluir { background-color: #FEE2E2; color: #991B1B; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500; }
+        .msg-alerta { background: #FEE2E2; color: #991B1B; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="msg-alerta">⚠️ {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <header>
+            <h1>⚙️ Painel do Administrador</h1>
+            <a href="/logout" class="btn-sair">Sair do Painel</a>
+        </header>
+
+        <div class="conteudo">
+            <div class="card">
+                <h2>Adicionar Novo Produto</h2>
+                <form action="/admin/adicionar" method="POST">
+                    <div class="form-group">
+                        <label>Nome do Produto</label>
+                        <input type="text" name="nome" placeholder="Ex: Tênis Esportivo ou Camisa" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preço (R$)</label>
+                        <input type="number" name="preco" step="0.01" placeholder="199.90" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tamanho (Número ou Letra)</label>
+                        <input type="text" name="tamanho" placeholder="Ex: G, GG, 38, 41" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantidade em Estoque</label>
+                        <input type="number" name="estoque" placeholder="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Link da Foto (URL)</label>
+                        <input type="url" name="foto" placeholder="https://site.com/foto.jpg">
+                    </div>
+                    <button type="submit">Salvar Produto</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Gerenciar Produtos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Descrição</th>
+                            <th>Tam.</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr>
+                            <td>
+                                {% if produto['foto'] %}
+                                <img src="{{ produto['foto'] }}" class="img-tabela" alt="Foto">
+                                {% else %}
+                                <div class="img-tabela" style="display:flex; align-items:center; justify-content:center; font-size:18px;">👟</div>
+                                {% endif %}
+                            </td>
+                            <td><strong>{{ produto['nome'] }}</strong></td>
+                            <td>{{ produto['tamanho'] }}</td>
+                            <td>R$ {{ "%.2f"|format(produto['preco']) }}</td>
+                            <td>{{ produto['estoque'] }} un.</td>
+                            <td><a href="/admin/deletar/{{ produto['id'] }}" class="btn-excluir">Remover</a></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6" style="text-align: center; color: #94A3B8;">Nenhum produto cadastrado.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Clientes Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Cliente</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>#{{ cliente['id'] }}</td>
+                        <td><strong>{{ cliente['nome'] }}</strong></td>
+                        <td>{{ cliente['email'] }}</td>
+                        <td>{{ cliente['telefone'] if cliente['telefone'] else 'Não informado' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" style="text-align: center; color: #94A3B8; padding: 15px;">Nenhum cliente cadastrado ainda.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
