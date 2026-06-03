@@ -1,1 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moda & Estilo - Loja Virtual</title>
+    <style>
+        :root {
+            --azul-bebe: #E0F2FE;
+            --azul-claro-hover: #BAE6FD;
+            --azul-escuro: #0369A1;
+            --fundo: #F8FAFC;
+            --texto: #334155;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--fundo); color: var(--texto); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { background-color: var(--azul-bebe); padding: 20px; border-radius: 16px; text-align: center; border: 1px solid var(--azul-claro-hover); margin-bottom: 30px; position: relative; }
+        header h1 { margin: 0; color: var(--azul-escuro); font-size: 26px; }
+        .btn-voltar-home { position: absolute; left: 20px; top: 22px; background: white; color: var(--azul-escuro); border: 1px solid var(--azul-claro-hover); padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        
+        .layout-loja { display: grid; grid-template-columns: 1fr 3fr; gap: 25px; }
+        @media (max-width: 800px) { .layout-loja { grid-template-columns: 1fr; } }
+        
+        .card-cadastro { background: white; padding: 20px; border-radius: 16px; border: 1px solid #E2E8F0; height: fit-content; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .card-cadastro h3 { margin-top: 0; color: var(--azul-escuro); border-bottom: 2px solid var(--azul-bebe); padding-bottom: 8px; }
+        
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #CBD5E1; border-radius: 8px; box-sizing: border-box; }
+        
+        .btn-enviar { background: var(--azul-bebe); color: var(--azul-escuro); border: 1px solid var(--azul-claro-hover); padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; }
+        .btn-enviar:hover { background: var(--azul-claro-hover); }
 
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .produto-card { background: white; border-radius: 16px; padding: 15px; border: 1px solid #E2E8F0; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .img-vitrine { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; background-color: #F1F5F9; margin-bottom: 12px; }
+        .img-placeholder { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 50px; background: #F1F5F9; border-radius: 12px; margin-bottom: 12px; }
+        .nome { font-size: 16px; font-weight: bold; margin: 5px 0; }
+        .tamanho { font-size: 12px; color: #64748B; background: #F1F5F9; padding: 2px 6px; border-radius: 6px; display: inline-block; font-weight: bold; }
+        .preco { font-size: 18px; color: var(--azul-escuro); font-weight: bold; margin: 10px 0; }
+        .estoque { font-size: 12px; color: #94A3B8; margin-bottom: 10px; }
+        .btn-comprar { background-color: var(--azul-bebe); color: var(--azul-escuro); border: 1px solid var(--azul-claro-hover); padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; text-decoration: none; display: block; box-sizing: border-box; }
+        .btn-comprar:hover { background-color: var(--azul-claro-hover); }
+        .esgotado { background-color: #F1F5F9; color: #94A3B8; border: 1px solid #E2E8F0; cursor: not-allowed; }
+        .msg-alerta { background: #DCFCE7; color: #15803D; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="msg-alerta">✨ {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <header>
+            <a href="/" class="btn-portal btn-voltar-home">← Início</a>
+            <h1>🩵 Loja de Roupas - Moda & Estilo</h1>
+        </header>
+
+        <div class="layout-loja">
+            <div class="card-cadastro">
+                <h3>Criar Conta</h3>
+                <form action="/cadastrar_cliente" method="POST">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" name="nome" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" name="email" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" name="telefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <button type="submit" class="btn-enviar">Cadastrar Conta</button>
+                </form>
+            </div>
+
+            <div class="grid-produtos">
+                {% for produto in produtos %}
+                <div class="produto-card">
+                    <div>
+                        {% if produto['foto'] %}
+                        <img src="{{ produto['foto'] }}" class="img-vitrine" alt="Foto">
+                        {% else %}
+                        <div class="img-placeholder">👕</div>
+                        {% endif %}
+                        <div class="nome">{{ produto['nome'] }}</div>
+                        <span class="tamanho">Tam: {{ produto['tamanho'] }}</span>
+                    </div>
+                    <div>
+                        <div class="preco">R$ {{ "%.2f"|format(produto['preco']) }}</div>
+                        <div class="estoque">Estoque: {{ produto['estoque'] }} un.</div>
+                        {% if produto['estoque'] > 0 %}
+                        <a href="/comprar/{{ produto['id'] }}" class="btn-comprar">Comprar</a>
+                        {% else %}
+                        <span class="btn-comprar esgotado">Esgotado</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <p style="grid-column: 1/-1; text-align: center; color: #94A3B8; padding: 40px 0;">Nenhuma roupa na vitrine no momento.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
