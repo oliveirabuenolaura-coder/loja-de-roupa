@@ -1,1 +1,143 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Administrativo</title>
+    <style>
+        :root {
+            --azul-bebe: #E0F2FE;
+            --azul-claro-hover: #BAE6FD;
+            --azul-escuro: #0369A1;
+            --fundo: #F8FAFC;
+            --texto: #334155;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--fundo);
+            color: var(--texto);
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+        }
+
+        h2 {
+            margin: 0 0 20px 0;
+            color: var(--azul-escuro);
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #38BDF8;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25);
+        }
+
+        button {
+            background: var(--azul-bebe);
+            color: var(--azul-escuro);
+            border: 1px solid var(--azul-claro-hover);
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: var(--azul-claro-hover);
+        }
+
+        .erro {
+            color: #991B1B;
+            background: #FEE2E2;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+            border: 1px solid #FCA5A5;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #64748B;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .voltar:hover {
+            color: var(--azul-escuro);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Acesso Administrativo</h2>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="erro">❌ {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" name="username" placeholder="admin" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit">Entrar no Painel</button>
+        </form>
+        
+        <a href="/" class="voltar">← Voltar ao Início</a>
+    </div>
+</body>
+</html>
